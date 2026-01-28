@@ -7,8 +7,9 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
+
 const routeModules = [
-    "./app/routes/user.routes.js"
+    "./app/routes/user.routes"
 ]
 
 routeModules.forEach((routePath) => {
