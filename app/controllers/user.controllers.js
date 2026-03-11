@@ -16,6 +16,7 @@ exports.createUser = async (req, res) => {
                 });
             }
         }
+        
 
         const existingUser = await User.findOne({ email });
         if (existingUser) {
@@ -25,13 +26,13 @@ exports.createUser = async (req, res) => {
             });
         }
 
-        const salt = process.env.BCRYPT_SALT;
+        const salt = Number(process.env.BCRYPT_SALT);
         const hashedPassword = await bcrypt.hash(password, salt);
 
         const access_token = jwt.sign(
             {
                 email: email,
-                role: "User"
+                role: "user"
             },
             process.env.JWT_SECRET,
             {
@@ -92,7 +93,7 @@ exports.loginUser = async (req, res) => {
             });
         } else {
             res.status(201).json({
-                success: true,
+                success: false,
                 message: "Wrong Password",
             });
         }
