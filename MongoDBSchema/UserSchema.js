@@ -6,12 +6,12 @@ const userSchema = new mongoose.Schema(
         Lname: { type: String },
         email: { type: String, unique: true, required: true },
         password: { type: String, required: true },
-        accessToken: { type: String, required: true },
+        accessToken: { type: String},
         phone: String,
         role: {
             type: String,
-            enum: ["User", "Admin"],
-            default: "User",
+            enum: ["USER", "ADMIN"],
+            default: "USER",
         },
         address: [
             {
