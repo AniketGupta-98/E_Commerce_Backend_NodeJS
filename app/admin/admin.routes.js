@@ -1,9 +1,9 @@
 module.exports = (app) => {
-    const Admin = require("../controllers/admin.controllers");
+    const Admin = require("./admin.controllers");
     const { protect } = require("../../middleware/auth.middleware");
     const { authorizeRoles } = require("../../middleware/role.middleware");
 
-    app.post("/create", protect, authorizeRoles("ADMIN"), Admin.createUser);
+    app.post("/create", protect, authorizeRoles("ADMIN"), Admin.createProduct);
 
 //     router.post("/products", protect, authorizeRoles("ADMIN"), createProduct);
 // router.put("/products/:id", protect, authorizeRoles("ADMIN"), updateProduct);
