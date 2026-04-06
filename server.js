@@ -13,7 +13,8 @@ app.use(express.json());
 app.use(cors());
 
 const routeModules = [
-    "./app/user/user.routes",
+    "./app/auth/auth.routes",
+    // "./app/user/user.routes",
     "./app/admin/admin.routes"
 ]
 

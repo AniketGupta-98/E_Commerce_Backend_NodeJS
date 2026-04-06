@@ -75,3 +75,29 @@
 // );
 
 // export default mongoose.model("Coupon", couponSchema);
+
+
+// MongoDBSchema/CouponsDiscountSchema.js
+const mongoose = require("mongoose");
+
+const couponSchema = new mongoose.Schema(
+  {
+    code: { type: String, unique: true },
+
+    discountType: {
+      type: String,
+      enum: ["PERCENTAGE", "FLAT"],
+    },
+
+    discountValue: Number,
+
+    minOrderAmount: Number,
+
+    expiryDate: Date,
+
+    isActive: { type: Boolean, default: true },
+  },
+  { timestamps: true }
+);
+
+module.exports = mongoose.model("Coupon", couponSchema);

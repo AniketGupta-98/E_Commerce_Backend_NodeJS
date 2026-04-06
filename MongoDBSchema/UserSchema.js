@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema(
         email: { type: String, unique: true, required: true },
         password: { type: String, required: true },
         accessToken: { type: String },
-        refreshToken: {type: String,},
+        refreshToken: { type: String, },
         Fname: { type: String },
         Lname: { type: String },
         phone: String,
@@ -23,7 +23,9 @@ const userSchema = new mongoose.Schema(
                 country: String,
             },
         ],
+        isActive: { type: Boolean, default: true },
     },
+
     { timestamps: true }
 );
 

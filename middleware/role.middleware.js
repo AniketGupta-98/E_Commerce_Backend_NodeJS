@@ -6,7 +6,6 @@ exports.authorizeRoles = (...roles) => {
         message: "Access denied",
       });
     }
-
     next();
   };
 };
