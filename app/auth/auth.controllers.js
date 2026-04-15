@@ -5,9 +5,9 @@ const { generateAccessToken, generateRefreshToken } = require("../utils/jwt");
 
 exports.createUser = async (req, res) => {
     try {
-        const { firstName, lastName, email, password } = req.body;
+        const { Fname, Lname, email, password } = req.body;
 
-        if (!firstName || !lastName || !email || !password) {
+        if (!Fname || !Lname || !email || !password) {
             return res.status(400).json({
                 success: false,
                 message: "All fields are required",
@@ -32,8 +32,8 @@ exports.createUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const user = await User.create({
-            Fname:firstName,
-            Lname:lastName,
+            Fname:Fname,
+            Lname:Lname,
             email,
             password: hashedPassword,
             role: "USER",
@@ -56,7 +56,7 @@ exports.createUser = async (req, res) => {
             process.env.JWT_REFRESH_SECRET,
             { expiresIn: "7d" }
         );
-
+        user.accessToken=accessToken
         user.refreshToken = refreshToken;
         await user.save();
 

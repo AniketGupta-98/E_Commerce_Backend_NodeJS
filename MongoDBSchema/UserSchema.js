@@ -3,9 +3,9 @@ const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema(
     {
         email: { type: String, unique: true, required: true },
-        password: { type: String, required: true },
-        accessToken: { type: String },
-        refreshToken: { type: String, },
+        password: { type: String, required: true,select: false  },
+        accessToken: { type: String,select: false  },
+        refreshToken: { type: String,select: false  },
         Fname: { type: String },
         Lname: { type: String },
         phone: String,
