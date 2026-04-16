@@ -124,6 +124,7 @@ exports.loginUser = async (req, res) => {
                 message: "User doesn't exists",
             });
         }
+        
         const isMatch = await bcrypt.compareSync(password, existingUser.password);
 
         const accessToken = generateAccessToken(existingUser);
