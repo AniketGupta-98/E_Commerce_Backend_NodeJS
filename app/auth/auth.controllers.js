@@ -130,6 +130,7 @@ exports.loginUser = async (req, res) => {
         const accessToken = generateAccessToken(existingUser);
         const refreshToken = generateRefreshToken(existingUser);
 
+        existingUser.accessToken = accessToken;
         existingUser.refreshToken = refreshToken;
         await existingUser.save();
 

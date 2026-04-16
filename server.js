@@ -15,7 +15,9 @@ app.use(cors());
 const routeModules = [
     "./app/auth/auth.routes",
     "./app/user/user.routes",
-    "./app/admin/admin.routes"
+    "./app/admin/admin.routes",
+    "./app/category/category.routes",
+    "./app/product/product.routes",
 ]
 
 routeModules.forEach((routePath) => {

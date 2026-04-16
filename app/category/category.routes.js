@@ -1,15 +1,16 @@
 module.exports = (app) => {
     const { protect } = require("../../middleware/auth.middleware");
     const { authorizeRoles } = require("../../middleware/role.middleware");
-    const User = require("./auth.controllers");
+    const category = require("./category.controllers");
 
 
-    app.post("/categories", protect, authorizeRoles("ADMIN"), User.createUser);
+    app.post("/categories", protect, authorizeRoles("ADMIN"), category.createCategory);
 
-    app.get("/categories", protect, User.loginUser);
-
-    app.put("/categories/:id", protect, authorizeRoles("ADMIN"), User.refreshAccessToken);
-
-    app.delete("/categories/:id", protect, authorizeRoles("ADMIN"), User.logout);
-
+    // app.put("/categories/:id", protect, authorizeRoles("ADMIN"), category.refreshAccessToken);
+    
+    // app.delete("/categories/:id", protect, authorizeRoles("ADMIN"), category.logout);
+    
+    // app.get("/categories", protect, category.loginUser);
+    
+    // app.get("/:id", getCategoryById);
 };
