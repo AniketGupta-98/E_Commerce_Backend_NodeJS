@@ -11,6 +11,7 @@ dns.setServers(["8.8.8.8", "8.8.4.4"]);
 const app = express();
 app.use(express.json());
 app.use(cors());
+// app.use(express.urlencoded({ extended: true }));
 
 const routeModules = [
     "./app/auth/auth.routes",

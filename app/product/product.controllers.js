@@ -1,4 +1,5 @@
 const Product = require("../../MongoDBSchema/ProductsSchema");
+const { uploadImage } = require("../utils/imageUpload");
 
 exports.createProduct = async (req, res) => {
   try {
@@ -9,12 +10,20 @@ exports.createProduct = async (req, res) => {
       discountPrice,
       stock,
       category,
-      images,
       brand,
     } = req.body;
 
     if (!title || !price) {
       return res.status(400).json({ message: "Title & price required" });
+    }
+
+    let fileUrl = [];
+    if (req.files) {
+      if (!req.files || req.files.length === 0) {
+        return res.status(400).json({ error: "No files uploaded" });
+      }
+      const uploadPromises = req.files.map(file => uploadImage(file));
+      fileUrl = await Promise.all(uploadPromises);
     }
 
     const product = await Product.create({
@@ -24,11 +33,11 @@ exports.createProduct = async (req, res) => {
       discountPrice,
       stock,
       category,
-      images,
+      images: fileUrl,
       brand,
     });
 
-    res.status(201).json({ success: true, data: product });
+    res.status(201).json({ success: true, message: "Product Created Successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
