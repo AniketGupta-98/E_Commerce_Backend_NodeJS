@@ -67,7 +67,22 @@ exports.getProducts = async (req, res) => {
       .populate("category", "name")
       .sort({ createdAt: -1 });
 
-    res.json({ success: true, data: products });
+
+    const productStatus = products.map(item => {
+      const obj = item.toObject(); 
+
+      return {
+        ...obj,
+        status:
+          obj.stock === 0
+            ? 'Out of Stock'
+            : obj.stock <= 15
+              ? 'Low Stock'
+              : 'In Stock'
+      };
+    });
+
+    res.json({ success: true, data: productStatus });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

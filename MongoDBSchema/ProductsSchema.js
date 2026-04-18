@@ -1,21 +1,18 @@
-// Product {
-//   _id: ObjectId,
-//   name: String,
-//   description: String,
-//   price: Number,
-//   stock: Number,
-//   categoryId: ObjectId,
-//   images: [String],
-//   isActive: Boolean,
-//   createdAt: Date
-// }
-
-
-// MongoDBSchema/ProductsSchema.js
 const mongoose = require("mongoose");
+
+/**
+ * Counter Schema
+ */
+const counterSchema = new mongoose.Schema({
+  key: { type: String, required: true },
+  seq: { type: Number, default: 0 },
+});
+
+const Counter = mongoose.model("Counter", counterSchema);
 
 const productSchema = new mongoose.Schema(
   {
+    productId: { type: String, unique: true },
     title: { type: String, required: true },
     description: String,
     price: { type: Number, required: true },
@@ -35,7 +32,25 @@ const productSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-productSchema.index({ title: "text", description: "text" });
+productSchema.pre("save", async function () {
+  try {
+    if (this.productId) return;
+
+    const counter = await Counter.findOneAndUpdate(
+      { key: "product" },
+      { $inc: { seq: 1 } },
+      {
+        upsert: true,
+        returnDocument: "after"
+      }
+    );
+
+    const number = counter.seq.toString().padStart(3, "0");
+    this.productId = `PRD-${number}`;
+
+  } catch (err) {
+    console.log("ProductSchema:-",err);
+  }
+});
 
 module.exports = mongoose.model("Product", productSchema);
-

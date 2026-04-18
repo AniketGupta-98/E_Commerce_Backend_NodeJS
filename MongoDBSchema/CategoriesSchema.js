@@ -1,11 +1,3 @@
-// Category {
-//   _id: ObjectId,
-//   name: String,
-//   description: String,
-//   isActive: Boolean,
-//   createdAt: Date
-// }
-
 const mongoose = require("mongoose");
 
 const categorySchema = new mongoose.Schema(

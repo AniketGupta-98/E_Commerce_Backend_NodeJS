@@ -15,7 +15,7 @@ module.exports = (app) => {
 
     app.post("/create/products", protect, authorizeRoles("ADMIN"), upload.array('images', 5), product.createProduct);
 
-    app.get("/products", protect, product.getProducts);
+    app.get("/productslist", protect, product.getProducts);
 
     // app.get("/products/:id", protect, User.refreshAccessToken);
 
