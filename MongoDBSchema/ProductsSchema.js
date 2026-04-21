@@ -1,14 +1,6 @@
 const mongoose = require("mongoose");
 
-/**
- * Counter Schema
- */
-const counterSchema = new mongoose.Schema({
-  key: { type: String, required: true },
-  seq: { type: Number, default: 0 },
-});
-
-const Counter = mongoose.model("Counter", counterSchema);
+const Counter = require("./Counter");
 
 const productSchema = new mongoose.Schema(
   {

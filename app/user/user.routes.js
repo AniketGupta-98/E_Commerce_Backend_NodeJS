@@ -4,11 +4,14 @@ module.exports = (app) => {
     const User = require("./user.controllers");
 
 
+    app.get("/users", protect, authorizeRoles("ADMIN"), User.getAllUser);
+
     // app.get("/users/profile", protect, authorizeRoles("USER"), User.createUser);
 
     // app.put("/users/profile", protect, authorizeRoles("USER"), User.loginUser);
 
-    app.get("/users", protect, authorizeRoles("ADMIN"), User.getAllUser);
+    app.patch("/users/update", protect, authorizeRoles("USER"), User.userUpdate);
+
 
     // app.delete("/api/users/:id", protect, authorizeRoles("ADMIN"), User.logout);
 
