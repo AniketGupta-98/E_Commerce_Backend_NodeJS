@@ -3,7 +3,7 @@ module.exports = (app) => {
     const { protect } = require("../../middleware/auth.middleware");
     const { authorizeRoles } = require("../../middleware/role.middleware");
 
-    app.post("/admin/login", authorizeRoles("ADMIN"), Admin.adminLogin);
+    app.post("/admin/login", Admin.adminLogin);
 
     app.post("/create/product", protect, authorizeRoles("ADMIN"), Admin.createProduct);
 
@@ -14,5 +14,10 @@ module.exports = (app) => {
     // router.get("/users", protect, authorizeRoles("ADMIN"), getAllUsers);
 
     app.post("/admin/usercreate", protect, authorizeRoles("ADMIN"), Admin.adminUserCreate);
+
+    app.put("/admin/userupdate", protect, authorizeRoles("ADMIN"), Admin.userUpdate);
+
+    app.delete("/admin/deleteuser/:id/:email", protect, authorizeRoles("ADMIN"), Admin.adminUserDelete);
+
 
 };

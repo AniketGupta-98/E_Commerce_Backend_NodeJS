@@ -21,13 +21,19 @@ exports.adminLogin = async (req, res) => {
 
         const existingUser = await User.findOne({ email });
 
+        if (existingUser.role != "ADMIN") {
+            return res.status(400).json({
+                success: false,
+                message: "Access Denied",
+            });
+        }
         if (!existingUser) {
             return res.status(400).json({
                 success: false,
                 message: "User doesn't exists",
             });
         }
-        
+
         const isMatch = await bcrypt.compareSync(password, existingUser.password);
 
         const accessToken = generateAccessToken(existingUser);
@@ -101,7 +107,7 @@ exports.adminUserCreate = async (req, res) => {
 
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(400).json({
+            return res.status(409).json({
                 success: false,
                 message: "User already exists",
             });
@@ -149,6 +155,90 @@ exports.adminUserCreate = async (req, res) => {
             success: true,
             message: "User created successfully",
         });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error: error.message,
+        });
+    }
+};
+
+
+
+exports.adminUserDelete = async (req, res) => {
+    try {
+
+        const { id, email } = req.params;
+
+        if (!id || !email) {
+            return res.status(400).json({
+                success: false,
+                message: "All fields are required",
+            });
+        }
+
+        const existingUser = await User.findOne({ email, userId: id });
+        if (!existingUser) {
+            return res.status(400).json({
+                success: false,
+                message: "user not found",
+            });
+        }
+
+
+        const updatedUser = await User.findOneAndUpdate(
+            { userId: id, email: email },
+            { isDeleted: true, isActive: false },
+            { new: true, runValidators: true }
+        );
+
+        res.status(200).json({
+            success: true,
+            message: "User Deleted successfully",
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error: error.message,
+        });
+    }
+};
+
+
+
+
+exports.userUpdate = async (req, res) => {
+    try {
+
+        const { userId, role, isActive, email, Fname, Lname } = req.body;
+
+        const existingUser = await User.findOne({ email, userId: userId });
+
+        const userData = {
+            email: email || existingUser.email,
+            Fname: Fname || existingUser.Fname,
+            Lname: Lname || existingUser.Lname,
+            role: role || existingUser.role,
+            isActive: isActive || existingUser.isActive,
+        }
+
+        console.log("userData",userData);
+
+        return
+
+        const updatedUser = await User.findOneAndUpdate(
+            { userId: id, email: email },
+            userData,
+            { new: true, runValidators: true }
+        ).select("-password -accessToken -refreshToken -_id");
+
+
+        return res.json({
+            success: true
+        });
+
     } catch (error) {
         res.status(500).json({
             success: false,

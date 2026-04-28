@@ -12,13 +12,18 @@ exports.getAllUser = async (req, res) => {
 
         const skip = (page - 1) * limit;
 
-        const users = await User.find()
-            .select("-password -accessToken -refreshToken -_id,-refreshToken,-accessToken")
-            .sort({ createdAt: -1 })
+        const users = await User.find({ isDeleted: false,}, {
+            password: 0,
+            accessToken: 0,
+            refreshToken: 0,
+            _id: 0
+        }).sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit);
+        // .select("-password -accessToken -refreshToken -_id,-refreshToken,-accessToken")
 
-        const totalUsers = await User.countDocuments();
+
+        const totalUsers = await User.countDocuments({isDeleted: false});
 
         return res.json({
             success: true,
@@ -47,8 +52,8 @@ exports.userUpdate = async (req, res) => {
 
         const updatedUser = await User.findByIdAndUpdate(
             userId,
-            { name: "New Name" },      
-            { new: true }              
+            { name: "New Name" },
+            { new: true }
         ).select("-password -accessToken -refreshToken -_id");
 
         const users = await User.find()
