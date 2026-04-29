@@ -2,31 +2,32 @@ const Category = require("../../MongoDBSchema/CategoriesSchema");
 
 
 exports.createCategory = async (req, res) => {
-try {
-    const { name, description, parentCategory } = req.body;
+    try {
+        const { name, description, parentCategory } = req.body;
 
-    if (!name || !description) {
-        return res.status(400).json({ message: "Name & description required" });
+        if (!name || !description) {
+            return res.status(400).json({ message: "Name & description required" });
+        }
+
+        const category = await Category.create({
+            name,
+            description,
+            parentCategory: parentCategory || null,
+        });
+
+        const { isActive, _id, createdAt, updatedAt, __v, ...filteredCategory } = category.toObject();
+
+        res.status(201).json({ success: true, data: filteredCategory });
+
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
-
-    const category = await Category.create({
-        name,
-        description,
-        parentCategory: parentCategory || null,
-    });
-
-    const { isActive, _id, createdAt, updatedAt,__v, ...filteredCategory } = category.toObject();
-
-    res.status(201).json({ success: true, data: filteredCategory });
-
-} catch (err) {
-    res.status(500).json({ message: err.message });
-}
 };
 
 exports.getCategories = async (req, res) => {
     try {
         const categories = await Category.find()
+            .select("-_id -isActive")
             .populate("parentCategory", "name")
             .sort({ createdAt: -1 });
 

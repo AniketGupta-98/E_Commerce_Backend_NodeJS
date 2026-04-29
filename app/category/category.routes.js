@@ -10,7 +10,7 @@ module.exports = (app) => {
     
     // app.delete("/categories/:id", protect, authorizeRoles("ADMIN"), category.logout);
     
-    // app.get("/categories", protect, category.loginUser);
+    app.get("/all/category", protect, category.getCategories);
     
     // app.get("/:id", getCategoryById);
 };

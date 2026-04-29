@@ -224,12 +224,8 @@ exports.userUpdate = async (req, res) => {
             isActive: isActive || existingUser.isActive,
         }
 
-        console.log("userData",userData);
-
-        return
-
         const updatedUser = await User.findOneAndUpdate(
-            { userId: id, email: email },
+            { userId: userId, email: email },
             userData,
             { new: true, runValidators: true }
         ).select("-password -accessToken -refreshToken -_id");
