@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
+const Counter = require("./Counter");
 
 const categorySchema = new mongoose.Schema(
     {
+        categoryId: { type: String, unique: true },
         name: { type: String, required: true },
 
         parentCategory: {
@@ -15,4 +17,25 @@ const categorySchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-module.exports = mongoose.model("Category", categorySchema);
+categorySchema.pre("save", async function () {
+  try {
+    if (this.categoryId) return;
+
+    const counter = await Counter.findOneAndUpdate(
+      { key: "category" },
+      { $inc: { seq: 1 } },
+      {
+        upsert: true,
+        returnDocument: "after"
+      }
+    );
+
+    const number = counter.seq.toString().padStart(3, "0");
+    this.categoryId = `CAT-${number}`;
+
+  } catch (err) {
+    console.log("categorySchema:-",err);
+  }
+});
+const Category = mongoose.model("Category", categorySchema);
+module.exports = Category;

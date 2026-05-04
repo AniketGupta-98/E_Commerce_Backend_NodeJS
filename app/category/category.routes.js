@@ -4,13 +4,14 @@ module.exports = (app) => {
     const category = require("./category.controllers");
 
 
-    app.post("/categories", protect, authorizeRoles("ADMIN"), category.createCategory);
+    app.post("/add/category", protect, authorizeRoles("ADMIN"), category.createCategory);
 
-    // app.put("/categories/:id", protect, authorizeRoles("ADMIN"), category.refreshAccessToken);
+    app.get("/all/category", protect, category.getCategories);
+
+    app.put("/category/:id", protect, authorizeRoles("ADMIN"), category.updateCategory);
     
     // app.delete("/categories/:id", protect, authorizeRoles("ADMIN"), category.logout);
     
-    app.get("/all/category", protect, category.getCategories);
     
     // app.get("/:id", getCategoryById);
 };
